@@ -1,21 +1,15 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
-	"log"
 	"net/http"
 )
 
 func main() {
-	res, err := http.Get("http://www.google.com/robots.txt")
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello World!"))
+	})
+	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
-		log.Fatal(err)
+		panic(err.Error())
 	}
-	defer res.Body.Close()
-	robots, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("%s", robots)
 }
